@@ -1,0 +1,32 @@
+services:
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: Invoice
+      MYSQL_ROOT_PASSWORD: root@123
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A harshwal_work_trial worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis

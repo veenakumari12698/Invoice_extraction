@@ -1,0 +1,18 @@
+# python
+__pycache__/
+*.pyc
+
+# env
+.env
+env/
+venv/
+
+# django
+db.sqlite3
+media/
+migrations/
+
+# docker
+*.log
+docker-volume/
+mysql-data/
