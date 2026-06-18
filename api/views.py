@@ -32,7 +32,7 @@ class InvoiceDetail(APIView):
             
         })
 
-
+### Vendor Reports
 class VendorReport(APIView):
     def get(self, request):
         data = (Invoice.objects.filter(status="DONE").values("vendor").annotate(total_amount=Sum("amount")).order_by("-total_amount"))
