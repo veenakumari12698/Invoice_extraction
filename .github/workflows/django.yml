@@ -1,33 +1,21 @@
-name: Django CI
+strategy:
+  max-parallel: 4
+  matrix:
+    python-version: ['3.10', '3.11', '3.12']
 
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+steps:
+  - uses: actions/checkout@v4
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+  - name: Set up Python ${{ matrix.python-version }}
+    uses: actions/setup-python@v5
+    with:
+      python-version: ${{ matrix.python-version }}
 
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.10, 3.11, 3.12]
+  - name: Install Dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
 
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run Tests
-        run: |
-          python manage.py test
+  - name: Run Tests
+    run: |
+      python manage.py test
